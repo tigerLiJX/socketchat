@@ -69,21 +69,18 @@ $(function(){
                 },
                 success: function(res){
                     console.log(res)
-                    // if(res.state == 1){
-                    //     tip(`${res.message}`);
-                    //     $('#check-name').removeClass('has-success').addClass('has-error');
-                    //     $('#check-name i').removeClass('glyphicon-ok').addClass('glyphicon-remove');
-                    //
-                    // }else if(res.state == 2){
-                    //     tip(`${res.message}`);
-                    //     setTimeout(() => {
-                    //         // location.href = '/signin'
-                    //     },1000)
-                    // }
+                    if(res.code == 1){
+                        tip(`${res.msg}`);
+                    }else if(res.code == 0){
+                        tip(`${res.msg}`);
+                        $('#check-name').removeClass('has-success').addClass('has-error');
+                        $('#check-name i').removeClass('glyphicon-ok').addClass('glyphicon-remove');
+                    }else {
+                        tip(`图像${res.msg}`);
+                    }
                 },
                 error: function(err){
                     console.log(err)
-                    // tip(`${err}`)
                 }
             })
         });
