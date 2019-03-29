@@ -65,8 +65,7 @@ $(function(){
                 data: {
                     username: $('#username').val().trim(),
                     password: $('#password').val().trim(),
-                    confirmpassword: $('#confirmpassword').val().trim(),
-                    avator: $('.preview').attr('src'),
+                    avatar: $('.avatar').attr('src'),
                 },
                 success: function(res){
                     console.log(res)
@@ -84,13 +83,13 @@ $(function(){
                 },
                 error: function(err){
                     console.log(err)
-                    tip(`${err}`)
+                    // tip(`${err}`)
                 }
             })
         });
 
     //选择图像
-    $('#avatar').on('change',function(){
+    $('#hidden').on('change',function(){
         let file = this.files[0];
         let reader = new FileReader();
         if(file.size >= 1024 * 1024 / 2){
@@ -98,7 +97,7 @@ $(function(){
             return;
         }
         reader.onload = function(e){
-            $('.preview').attr('src',e.target.result);
+            $('.avatar').attr('src',e.target.result);
         }
         reader.readAsDataURL(file);
     })

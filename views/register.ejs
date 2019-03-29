@@ -40,9 +40,8 @@
                 <div class="form-group">
                     <label for="" class="col-sm-3 control-label">选择头像</label>
                     <div class="col-sm-9">
-                        <input type="file" class="form-control" id="avatar" name="avatar">
-                        <!--<input type="hidden" id="avatorVal">-->
-                        <img src="https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2897217770,606911253&fm=11&gp=0.jpg" alt="" class="preview">
+                        <input type="file" class="form-control" id="hidden" name="avatar">
+                        <img class="avatar" src="https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=2897217770,606911253&fm=11&gp=0.jpg" alt="">
                     </div>
                 </div>
                 <div class="form-group">
@@ -67,27 +66,6 @@
 <script src="/jquery/jquery.min.js"></script>
 <script src="/bootstrap/bootstrap.min.js"></script>
 <script src="/bootstrapvalidator/bootstrapValidator.min.js"></script>
-<!--<script src="/js/register.js"></script>-->
-<script>
-    $('#submit').click(function() {
-        $.ajax({
-            url: "/register",
-            type: 'POST',
-            data: {
-                username: $('#username').val().trim(),
-                password: $('#password').val().trim(),
-                confirmpassword: $('#confirmpassword').val().trim(),
-                avator: $('.preview').attr('src'),
-            },
-            success: function(res){
-                console.log(res)
-            },
-            error: function(err){
-                console.log(err)
-            }
-        })
-        return false
-    })
-</script>
+<script src="/js/register.js"></script>
 </body>
 </html>

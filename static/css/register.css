@@ -6,12 +6,16 @@
     width: 400px;
     margin: 50px auto 0;
 }
-.preview{
-    margin-top: 10px;
+#hidden{
+    position: absolute;
+    opacity: 0;
+}
+.avatar{
     width: 30px;
     height: 30px;
     border-radius: 15px;
 }
+
 .login{
     color: red;
 }

@@ -16,7 +16,7 @@ const store = new mysqlSession({
     user: config.database.USERNAME,
     password: config.database.PASSWORD,
     host: config.database.HOST,
-    // port: config.database.PORT, //widnows 下去掉这一行
+    port: config.database.PORT, //widnows 下去掉这一行
 })
 
 //使用session中间件
