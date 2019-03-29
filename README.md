@@ -2,7 +2,7 @@
 最近做的++RN++项目中有即时聊天需求，在了解到++socket++可以实现这一功能，突发想法做一个简单的基于++socket.io++插件的例子，进而对++socket++有深一步的认识
 
 ##### 技术点:
-node+koa+mysql+socket.io
+node+koa+mysql+socket.io+baidu-aip-sdk
 
 ##### 环境（Mac）
 本地集成环境（MAMP）
@@ -52,22 +52,35 @@ socket.io
 koa-bodyparser
 ```
 
-##### config目录下新建config.js进行数据库配置
+##### config目录下新建config.js进行数据库配置(注意Windows与Mac的区别)
+Windows下密码没有设置就为空，不需要设置 PORT
 ```
 'use strict'
 
 const config = {
     //启动端口
-    port: 3000,
+    port: 3003,
     //数据库配置
     database: {
         DATABASE: 'socketchat', //数据库名称
         USERNAME: 'root', //数据库用户
-        PASSWORD: 'root', //数据库密码
+        PASSWORD: 'root', //数据库密码 //widnows 下没有设置密码就为空
         HOST: '127.0.0.1', //数据库地址
-        PORT: '8889'
+        PORT: '8889' //widnows 下去掉这一行
     }
 }
+
+//if windows
+// const config = {
+//     port: 3002,
+//     //数据库配置
+//     database: {
+//         DATABASE: 'socketchat', //数据库名称
+//         USERNAME: 'root', //数据库用户
+//         PASSWORD: '', //数据库密码
+//         HOST: '127.0.0.1', //数据库地址
+//     }
+// }
 
 module.exports = config
 ```
@@ -177,6 +190,60 @@ const route = new router();
 
 route.get('/register', async (ctx, next) => {
     await ctx.render('register')
+})
+
+route.post('/register', async (ctx,next) => {
+    const params = ctx.request.body;
+
+    //对base64头像进行处理
+    let avatar = params.avatar;
+    let base64Img = '';
+    if(avatar.includes(';base64,')) {
+        base64Img = avatar.replace(/^data:image\/\w+;base64,/,'');
+        /**
+         * 图像审核
+         * conclusionType => 1.合规,2.疑似，3.不合规
+         */
+        await client.imageCensorUserDefined(base64Img, 'base64')
+            .then(function(data) {
+                ctx.body = {data}
+                if(data.conclusionType == 1) {
+                    //将base64图片转为buffer对象
+                    let dataBuffer = new Buffer(base64Img, 'base64');
+                    avatar = new Date().getTime()+'.png';
+                    let uploads = './static/uploads/' + avatar;
+                    fs.writeFile(uploads, dataBuffer, (err, data) => {
+                        if(err) {
+                            throw err;
+                        }else {
+                            console.log('头像保存成功')
+                        }
+                    })
+                    //注册
+                    const user = [
+                        params.username,
+                        md5(params.password),
+                        avatar,
+                        moment().format('YYYY-MM-DD HH:mm:ss')
+                    ]
+                    // socketchat.insertUser(user)
+                    //    .then(result => {
+                    //        ctx.body = {
+                    //            code: 1,
+                    //            msg: '注册成功',
+                    //        }
+                    //    })
+                    //    .catch(err => {
+                    //        ctx.body = {
+                    //            code: 0,
+                    //            msg: '注册失败',
+                    //        }
+                    //    })
+                }
+            }, function(e) {
+                console.log(e)
+            });
+    }
 })
 
 module.exports = route;
