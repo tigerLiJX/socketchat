@@ -1,0 +1,94 @@
+<%- include("header") %>
+<link rel="stylesheet" href="/css/chat.css">
+<div class="container">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <div class="panel-title">
+                <img src="/uploads/<%= session.avatar %>" alt="" class="avatar">
+                <span class="text-right" id="loginout">退出</span>
+            </div>
+        </div>
+        <div class="panel-body">
+            <ul class="nav nav-pills nav-stacked">
+                <% users.forEach(val => { %>
+                <li class="nav-li">
+                    <% if(val.avatar.includes('http')){ %>
+                        <img src="<%= val.avatar %>" alt="" class="avatar">
+                    <% }else { %>
+                            <img src="/uploads/<%= val.avatar %>" alt="" class="avatar">
+                    <% } %>
+                    <div class="user">
+                        <span class="username"><%= val.username %></span>
+                        <p class="last-words">hello...</p>
+                    </div>
+                </li>
+                <% }) %>
+            </ul>
+            <div class="right">
+                <ul class="right-top">
+                    <div id="username">admin3</div>
+                    <li class="myself">
+                        <span class="my-content">地方范德萨发生地方范德萨发生地方范德萨发生地方范德萨发生地方范德萨发生地方范德萨发生</span>
+                        <img src="/uploads/<%= session.avatar %>" alt="" class="my-avatar">
+                    </li>
+                    <li class="friend">
+                        <img src="/uploads/1554086772911.png" alt="" class="fr-avatar">
+                        <span class="fr-content">地方范德萨发生</span>
+                    </li>
+                </ul>
+                <ul class="other">
+                    <li>字体</li>
+                    <li>表情</li>
+                </ul>
+                <div class="right-bottom">
+                    <textarea name="" id="send-content"></textarea>
+                    <button class="btn btn-info" id="send">发送(Enter)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="message"></div>
+
+<%- include("footer",{type:"/js/chat.js"}) %>
+<script src="https://cdn.bootcss.com/socket.io/2.2.0/socket.io.js"></script>
+<script>
+    var socket = io.connect();
+    //发送消息
+    $('#send').on('click',function() {
+        sendMsg();
+    })
+    $(document).on('keydown',function (event) {
+        if(event.ctrlKey && event.keyCode == 13) {
+            sendMsg();
+        }
+    })
+    function sendMsg() {
+        let value = $('#send-content').val().trim();
+        if(!value) { return }
+        let _liHtml = `
+            <li class="myself">
+                <span class="my-content">${value}</span>
+                <img src="/uploads/<%= session.avatar %>" alt="" class="my-avatar">
+            </li>
+        `
+        $('.right-top').append(_liHtml).scrollTop($('.right-top')[0].scrollHeight );
+        $('#send-content').val('');
+        socket.emit("sendMsg",{
+            value,
+        });
+    }
+
+
+    // 监听 receiveMsg 事件，用来接收其他客户端推送的消息
+    socket.on("receiveMsg",function (data) {
+        console.log(data)
+        let _liHtml = `
+            <li class="friend">
+                <img src="/uploads/1554086772911.png" alt="" class="fr-avatar">
+                <span class="fr-content">${data.value}</span>
+            </li>
+        `
+        $('.right-top').append(_liHtml).scrollTop($('.right-top')[0].scrollHeight );
+    });
+</script>

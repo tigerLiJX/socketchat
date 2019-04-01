@@ -71,6 +71,9 @@ $(function(){
                     console.log(res)
                     if(res.code == 1){
                         tip(`${res.msg}`);
+                        setTimeout(() => {
+                            location.href = '/login'
+                        },1500)
                     }else if(res.code == 0){
                         tip(`${res.msg}`);
                         $('#check-name').removeClass('has-success').addClass('has-error');

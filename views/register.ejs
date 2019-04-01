@@ -1,17 +1,5 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>注册</title>
-    <link rel="stylesheet" href="/bootstrap/bootstrap.css">
-    <link rel="stylesheet" href="/css/reset.css">
-    <link rel="stylesheet" href="/bootstrapvalidator/bootstrapValidator.min.css">
-    <link rel="stylesheet" href="/css/register.css">
-</head>
-<body>
+<%- include("header") %>
+<link rel="stylesheet" href="/css/register.css">
 <div class="container">
     <div class="panel panel-primary">
         <div class="panel-heading">
@@ -63,9 +51,4 @@
 </div>
 <div class="message"></div>
 
-<script src="/jquery/jquery.min.js"></script>
-<script src="/bootstrap/bootstrap.min.js"></script>
-<script src="/bootstrapvalidator/bootstrapValidator.min.js"></script>
-<script src="/js/register.js"></script>
-</body>
-</html>
+<%- include("footer",{type:"/js/register.js"}) %>

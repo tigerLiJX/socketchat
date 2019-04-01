@@ -1,0 +1,57 @@
+<%- include("header") %>
+<link rel="stylesheet" href="/css/login.css">
+<body>
+<div class="container">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <div class="panel-title text-center">登 录</div>
+        </div>
+        <div class="panel-body">
+            <form class="form-horizontal" id="form">
+                <div class="form-group" id="check-name">
+                    <label for="" class="col-sm-3 control-label">用户名</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="username" name="username" placeholder="请输入用户名">
+                    </div>
+                </div>
+                <div class="form-group" id="check-password">
+                    <label for="" class="col-sm-3 control-label">密码</label>
+                    <div class="col-sm-9">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="请输入密码">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <button type="submit" class="col-sm-6 btn btn-primary" id="submit">登录</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                            <span>
+                                没有账号，前去
+                                <a href="/register" class="register">注册</a>
+                            </span>
+                    </div>
+                </div>
+                <div class="form-group" id="check-password">
+                    <label for="" class="col-sm-3 control-label">其他方式</label>
+                    <div class="col-sm-9">
+                        <a href="">
+                            <i class="iconfont icon-qq"></i>
+                        </a>
+                        <a href="">
+                            <i class="iconfont icon-wechat"></i>
+                        </a>
+                        <a href="">
+                            <i class="iconfont icon-weibo"></i>
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="message"></div>
+
+<%- include("footer",{type:"/js/login.js"}) %>

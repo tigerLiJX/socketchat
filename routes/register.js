@@ -4,18 +4,14 @@ const fs = require('fs');
 const md5 = require('md5');
 const moment = require('moment');
 const client = require('../util/client');
+const check = require('../middlewares/checkLogin');
 const route = new router();
-
+//注册
 route.get('/register', async (ctx,next) => {
+    check.checkLogin(ctx);
     await ctx.render('register',{
         session: ctx.session,
-    })
-})
-
-//注册页
-route.get('/register', async (ctx,next) => {
-    await ctx.render('register',{
-        session: ctx.session,
+        title: '注册'
     })
 })
 
@@ -40,9 +36,9 @@ route.post('/register', async (ctx,next) => {
 
 route.post('/register', async (ctx,next) => {
     const params = ctx.request.body;
-
     //对base64头像进行处理
     let avatar = params.avatar;
+
     let base64Img = '';
     if(avatar.includes(';base64,')) {
         base64Img = avatar.replace(/^data:image\/\w+;base64,/,'');
@@ -64,12 +60,13 @@ route.post('/register', async (ctx,next) => {
                             // console.log('头像保存成功')
                         }
                     })
-                    const user = [
+                    let user = [
                         params.username,
                         md5(params.password),
                         avatar,
                         moment().format('YYYY-MM-DD HH:mm:ss')
-                    ]
+                    ];
+
                     await socketchat.insertUser(user)
                         .then(() => {
                             ctx.body = {
@@ -87,6 +84,20 @@ route.post('/register', async (ctx,next) => {
             }, function(e) {
                 console.log(e)
             });
+    }else {
+        let user = [
+            params.username,
+            md5(params.password),
+            avatar,
+            moment().format('YYYY-MM-DD HH:mm:ss')
+        ];
+        await socketchat.insertUser(user)
+        .then(() => {
+            ctx.body = {
+                code: 1,
+                msg: '注册成功',
+            }
+        })
     }
 })
 

@@ -37,7 +37,7 @@ $(function(){
 
             var bv = $form.data('bootstrapValidator');
             $.ajax({
-                url: "/signin",
+                url: "/login",
                 type: 'POST',
                 data: {
                     username: $('#username').val().trim(),
@@ -45,20 +45,20 @@ $(function(){
                 },
                 success: function(res){
                     console.log(res)
-                    if(res.state == 1){
-                        tip(`${res.message}`);
+                    if(res.code == 1){
+                        tip(`${res.msg}`);
+                        setTimeout(() => {
+                            location.href = '/chat'
+                        },1000)
+                    }else if(res.code == 0){
+                        tip(`${res.msg}`);
                         $('#check-name').removeClass('has-success').addClass('has-error');
                         $('#check-name i').removeClass('glyphicon-ok').addClass('glyphicon-remove');
 
-                    }else if(res.state == 2){
-                        tip(`${res.message}`);
+                    }else if(res.code == 2){
+                        tip(`${res.msg}`);
                         $('#check-password').removeClass('has-success').addClass('has-error');
                         $('#check-password i').removeClass('glyphicon-ok').addClass('glyphicon-remove');
-                    }else if(res.state == 3){
-                        tip(`${res.message}`);
-                        setTimeout(() => {
-                            location.href = '/home'
-                        },1000)
                     }
                 },
                 error: function(err){
