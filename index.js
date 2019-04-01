@@ -45,12 +45,12 @@ app.use(require('./routes/register.js').routes())
 app.use(require('./routes/login.js').routes())
 app.use(require('./routes/loginout.js').routes())
 app.use(require('./routes/chat.js').routes())
+app.use(require('./routes/send.js').routes())
 
 //socket连接
 io.on('connection', function (socket) {
     //emit 发送消息，on 监听消息
     socket.on('sendMsg', function (data) {
-        console.log(data)
         socket.broadcast.emit("receiveMsg",data);
     });
 });

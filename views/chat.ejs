@@ -49,11 +49,26 @@
     </div>
 </div>
 <div class="message"></div>
+<input type="hidden" value="<%= session.id %>" id="uid" name="uid">
 
 <%- include("footer",{type:"/js/chat.js"}) %>
 <script src="https://cdn.bootcss.com/socket.io/2.2.0/socket.io.js"></script>
 <script>
     var socket = io.connect();
+
+    //接收消息
+    socket.on("receiveMsg",function (data) {
+        console.log(data)
+        let user = data.user;
+        let _liHtml = `
+            <li class="friend">
+                <img src="/uploads/${user.avatar}" alt="" class="fr-avatar">
+                <span class="fr-content">${data.sendMsg}</span>
+            </li>
+        `
+        $('.right-top').append(_liHtml).scrollTop($('.right-top')[0].scrollHeight );
+    });
+
     //发送消息
     $('#send').on('click',function() {
         sendMsg();
@@ -64,31 +79,31 @@
         }
     })
     function sendMsg() {
-        let value = $('#send-content').val().trim();
-        if(!value) { return }
-        let _liHtml = `
-            <li class="myself">
-                <span class="my-content">${value}</span>
-                <img src="/uploads/<%= session.avatar %>" alt="" class="my-avatar">
-            </li>
-        `
-        $('.right-top').append(_liHtml).scrollTop($('.right-top')[0].scrollHeight );
-        $('#send-content').val('');
-        socket.emit("sendMsg",{
-            value,
-        });
+        $.ajax({
+            url: 'send',
+            type: 'get',
+            data: {
+                uid: $('#uid').val(),
+            },
+            success: function (res) {
+                if(res.code == 1) {
+                    let value = $('#send-content').val().trim();
+                    if(!value) { return }
+                    let _liHtml = `
+                    <li class="myself">
+                        <span class="my-content">${value}</span>
+                        <img src="/uploads/<%= session.avatar %>" alt="" class="my-avatar">
+                    </li>
+                `
+                    $('.right-top').append(_liHtml).scrollTop($('.right-top')[0].scrollHeight );
+                    $('#send-content').val('');
+                    socket.emit("sendMsg",{
+                        sendMsg: value,
+                        user: res.user
+                    });
+                }
+            }
+        })
+
     }
-
-
-    // 监听 receiveMsg 事件，用来接收其他客户端推送的消息
-    socket.on("receiveMsg",function (data) {
-        console.log(data)
-        let _liHtml = `
-            <li class="friend">
-                <img src="/uploads/1554086772911.png" alt="" class="fr-avatar">
-                <span class="fr-content">${data.value}</span>
-            </li>
-        `
-        $('.right-top').append(_liHtml).scrollTop($('.right-top')[0].scrollHeight );
-    });
 </script>

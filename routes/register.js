@@ -6,6 +6,10 @@ const moment = require('moment');
 const client = require('../util/client');
 const check = require('../middlewares/checkLogin');
 const route = new router();
+
+route.get('/', async (ctx,next) => {
+    ctx.redirect('/chat')
+})
 //注册
 route.get('/register', async (ctx,next) => {
     check.checkLogin(ctx);
